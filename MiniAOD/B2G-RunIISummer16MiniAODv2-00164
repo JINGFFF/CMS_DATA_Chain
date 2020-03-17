@@ -1,0 +1,16 @@
+#!/bin/bash
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+export SCRAM_ARCH=slc6_amd64_gcc530
+if [ -r CMSSW_8_0_21/src ] ; then 
+ echo release CMSSW_8_0_21 already exists
+else
+scram p CMSSW CMSSW_8_0_21
+fi
+cd CMSSW_8_0_21/src
+eval `scram runtime -sh`
+
+
+scram b
+cd ../../
+cmsDriver.py step1 --filein "dbs:/WprimeToTB_TToHad_M-800_RH_TuneCUETP8M1_13TeV-comphep-pythia8/RunIISummer16DR80Premix-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/AODSIM" --fileout file:B2G-RunIISummer16MiniAODv2-00164.root --mc --eventcontent MINIAODSIM --runUnscheduled --datatier MINIAODSIM --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step PAT --nThreads 4 --era Run2_2016 --python_filename B2G-RunIISummer16MiniAODv2-00164_1_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 5760 || exit $? ; 
+
